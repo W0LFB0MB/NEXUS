@@ -31,7 +31,6 @@ db.connect();
 export default class Bot {
 	public static client: Client;
 	public static subscriptions: Map<Snowflake, MusicSubscription>;
-	public static readonly heroku: boolean = (!!process.env._ && process.env._.indexOf('heroku') !== -1);
 	private static _loadMs: number;
 	public static get loadMs(): number { return Bot._loadMs; }
 
