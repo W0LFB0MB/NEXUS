@@ -31,6 +31,7 @@ db.connect();
 export default class Bot {
 	public static client: Client;
 	public static subscriptions: Map<Snowflake, MusicSubscription>;
+	public static readonly config = JSON.parse(fs.readFileSync('config.json').toString());
 	private static _loadMs: number;
 	public static get loadMs(): number { return Bot._loadMs; }
 
