@@ -22,7 +22,7 @@ export default {
 			.setDescription(`${Bot.client.user.username} is starting`)
 			.setTimestamp();
 
-		startupEmbed.setFooter({ text: `${Bot.heroku ? 'REMOTE' : 'LOCAL' } ${Bot.loadMs}ms` });
+		startupEmbed.setFooter({ text: `${Bot.loadMs}ms` });
 		BotStartChannel.send({ embeds: [startupEmbed] });
 
 		const { rows: activityAndStatusRows } = await db.query({
