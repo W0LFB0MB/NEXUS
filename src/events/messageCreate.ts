@@ -1,7 +1,6 @@
 import { Message } from 'discord.js';
 import fs from 'fs';
 
-export const commandPrefix = 'n!';
 export const commands: Array<{
 	name: string,
 	restricted: boolean,
@@ -30,8 +29,8 @@ export default {
 		if (!Bot.client.application?.owner) await Bot.client.application?.fetch();
 		if (!(process.env._ && process.env._.indexOf('heroku') !== -1) && message.author.id !== Bot.client.application?.owner?.id) return;
 
-		if (message.content.toLowerCase().startsWith(commandPrefix)) { // check if message is actually a command
-			const messageCommand = message.content.slice(commandPrefix.length).split(' ')[0].toLowerCase(); // get command keyword e.g. deploy instead of n!deploy awdawd
+		if (message.content.toLowerCase().startsWith(Bot.config.CommandPrefix)) { // check if message is actually a command
+			const messageCommand = message.content.slice(Bot.config.CommandPrefix.length).split(' ')[0].toLowerCase(); // get command keyword e.g. deploy instead of n!deploy awdawd
 			console.log(messageCommand);
 			let foundCommand = false;
 
