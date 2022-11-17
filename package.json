@@ -9,7 +9,8 @@
   },
   "scripts": {
     "tsc": "tsc",
-    "postinstall": "npm run tsc",
+    "clear-build": "node scripts/clear-build.js",
+    "postinstall": "npm run clear-build && npm run tsc",
     "start": "node -r dotenv/config ."
   },
   "repository": {
