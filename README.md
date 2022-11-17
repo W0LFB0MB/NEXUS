@@ -15,4 +15,18 @@ A discord bot for the vibes!
 
 ## Setup
 
+### Requirements
+
+#### Software
+
+* [Node.JS v18 & NPM](https://nodejs.org/en/download/)
+* [FFMPEG](https://ffmpeg.org/download.html)
+* [Git (optional)](https://git-scm.com/downloads)
+
+#### Other
+
+* [Discord account](https://discord.com/)
+
+### Process
+
 TODO
