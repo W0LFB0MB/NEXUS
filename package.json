@@ -5,7 +5,7 @@
   "main": "build/bot.js",
   "type": "module",
   "engines": {
-    "node": "v18.0.0"
+    "node": ">=18.0.0 <19.0.0"
   },
   "scripts": {
     "tsc": "tsc",
