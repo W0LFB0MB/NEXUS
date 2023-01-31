@@ -67,49 +67,51 @@ export default {
 				}
 
 				//playlist code
-				if (isUrl) {
-					const playlistId = getYoutubePlaylistId(toQueue);
-					console.log('pid', playlistId);
+				// if (isUrl) {
+				// 	const playlistId = getYoutubePlaylistId(toQueue);
+				// 	console.log('pid', playlistId);
 
-					// if (playlistId) {
-					// 	getYoutubePlaylistItems(playlistId).then(async playlistItems => {
-					// 		interaction.followUp(`Queueing **${playlistItems.length} songs**`);
-					// 		let failed = 0;
+				// 	// if (playlistId) {
+				// 	// 	getYoutubePlaylistItems(playlistId).then(async playlistItems => {
+				// 	// 		interaction.followUp(`Queueing **${playlistItems.length} songs**`);
+				// 	// 		let failed = 0;
 
-					// 		for (const item of playlistItems) {
-					// 			// Attempt to create a Track from the user's video URL
-					// 			try {
-					// 				const track = await Track.fromUrl(`https://www.youtube.com/watch?v=${item.contentDetails.videoId}`, {
-					// 					onStart() {
-					// 						let trackTitle = track.title;
-					// 						if (track.type === TrackType.youtube) trackTitle = `[${track.title}](https://www.youtube.com/watch?v=${track.location})`;
-					// 						interaction.followUp({ content: `Now playing **${trackTitle}!**`, ephemeral: false }).catch(console.warn);
+				// 	// 		for (const item of playlistItems) {
+				// 	// 			// Attempt to create a Track from the user's video URL
+				// 	// 			try {
+				// 	// 				const track = await Track.fromUrl(`https://www.youtube.com/watch?v=${item.contentDetails.videoId}`, {
+				// 	// 					onStart() {
+				// 	// 						let trackTitle = track.title;
+				// 	// 						if (track.type === TrackType.youtube) trackTitle = `[${track.title}](https://www.youtube.com/watch?v=${track.location})`;
+				// 	// 						interaction.followUp({ content: `Now playing **${trackTitle}!**`, ephemeral: false }).catch(console.warn);
 											
-					// 					},
-					// 					onFinish() {
-					// 						interaction.followUp({ content: 'Now finished!', ephemeral: true }).catch(console.warn); // not required, caused extra spam
-					// 					},
-					// 					onError(error: Error) {
-					// 						console.warn(error);
-					// 						interaction.followUp({ content: 'An error has occured, please try again later.', ephemeral: true }).catch(console.warn);
-					// 					},
-					// 				});
-					// 				// Enqueue the track and reply a success message to the user
-					// 				subscription!.enqueue(track);
-					// 			} catch(err) {
-					// 				console.error(err);
-					// 				failed++;
-					// 			}
-					// 		}
+				// 	// 					},
+				// 	// 					onFinish() {
+				// 	// 						interaction.followUp({ content: 'Now finished!', ephemeral: true }).catch(console.warn); // not required, caused extra spam
+				// 	// 					},
+				// 	// 					onError(error: Error) {
+				// 	// 						console.warn(error);
+				// 	// 						interaction.followUp({ content: 'An error has occured, please try again later.', ephemeral: true }).catch(console.warn);
+				// 	// 					},
+				// 	// 				});
+				// 	// 				// Enqueue the track and reply a success message to the user
+				// 	// 				subscription!.enqueue(track);
+				// 	// 			} catch(err) {
+				// 	// 				console.error(err);
+				// 	// 				failed++;
+				// 	// 			}
+				// 	// 		}
 
-					// 		if (failed > 0) interaction.followUp(`Failed to enqueue ${failed} song${failed === 1 ? '' : 's'}.`);
-					// 	});
+				// 	// 		if (failed > 0) interaction.followUp(`Failed to enqueue ${failed} song${failed === 1 ? '' : 's'}.`);
+				// 	// 	});
 						
-					// 	return;
-					// }
-				}
+				// 	// 	return;
+				// 	// }
+				// }
 
 				const trackCreator = isUrl ? Track.fromUrl : Track.fromTitle;
+				console.log('isUrl = '+isUrl);
+
 
 				// Attempt to create a Track from the user's video URL
 				trackCreator(toQueue, {
