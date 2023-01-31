@@ -14,16 +14,13 @@ WORKDIR /nexus-bot
 COPY package.json ./
 COPY package-lock.json ./
 
-COPY ./scripts ./scripts
 COPY tsconfig.json tsconfig.json
 COPY ./src ./src
-
 
 RUN npm ci
 
 RUN npm run build
 
-RUN rm -rf ./scripts
 RUN rm -f tsconfig.json
 RUN rm -rf ./src
 
