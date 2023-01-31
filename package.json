@@ -8,9 +8,7 @@
     "node": ">=18.0.0 <19.0.0"
   },
   "scripts": {
-    "tsc": "tsc",
-    "clear-build": "node scripts/clear-build.js",
-    "postinstall": "npm run clear-build && npm run tsc",
+    "build": "tsc",
     "start": "node -r dotenv/config ."
   },
   "repository": {
@@ -54,6 +52,6 @@
     "socket.io": "^4.5.1",
     "sqlite3": "^5.1.2",
     "tmi.js": "^1.8.5",
-    "ytdl-core": "4.10.0"
+    "ytdl-core": "^4.11.2"
   }
 }

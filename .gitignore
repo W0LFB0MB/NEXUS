@@ -64,3 +64,5 @@ build
 
 # visual studio code config directory
 .vscode
+
+doc

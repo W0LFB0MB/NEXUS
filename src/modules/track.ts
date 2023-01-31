@@ -153,12 +153,10 @@ export default class Track implements TrackData {
 			},
 		};
 
-		const curl = new URL(url); 
-
 		return new Track({
 			type: TrackType.youtube,
 			title: he.decode(info.videoDetails.title),
-			location: curl.searchParams.get('v')!,
+			location: info.videoDetails.videoId,
 			...wrappedMethods,
 		});
 	}
