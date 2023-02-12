@@ -26,8 +26,6 @@ const intents = [
 	GatewayIntentBits.MessageContent,
 ];
 
-db.connect();
-
 export default class Bot {
 	public static client: Client;
 	public static subscriptions: Map<Snowflake, MusicSubscription>;
@@ -36,6 +34,7 @@ export default class Bot {
 	public static get loadMs(): number { return Bot._loadMs; }
 
 	static {
+		console.log('BOT STARTED');
 		this.client = new Discord.Client({ intents: intents });
 		this.subscriptions = new Map<Snowflake, MusicSubscription>();
 
@@ -68,7 +67,7 @@ export default class Bot {
 
 //SAVING CRASH TIMESTAMP TO DATABASE
 
-const crashTimestampLog = () => db.query({
+const crashTimestampLog = () => db.pool.query({
 	text: `
 		UPDATE options
 		SET value = $1

@@ -45,7 +45,7 @@ export default class MusicSubscription {
 			this.audioPlayer.unpause();
 		}
 
-		db.query({
+		db.pool.query({
 			text: `
 				UPDATE servers
 				SET track_pause = $2
@@ -177,7 +177,7 @@ export default class MusicSubscription {
 			};
 		});
 
-		db.query({
+		db.pool.query({
 			text: `
 					UPDATE servers
 					SET queue = $2
@@ -205,7 +205,7 @@ export default class MusicSubscription {
 		this.queue = [];
 		this.audioPlayer.stop(true);
 
-		db.query({
+		db.pool.query({
 			text: `
 					UPDATE servers
 					SET track_location = null, track_type = null, track_loop = null, channel_id = null, track_start = null, track_pause = null, queue = null
@@ -240,7 +240,7 @@ export default class MusicSubscription {
 		// Take the first item from the queue. This is guaranteed to exist due to the non-empty check above.
 		const nextTrack = this.queue.shift();
 		if (!nextTrack) {
-			db.query({
+			db.pool.query({
 				text: `
 					UPDATE servers
 					SET track_location = null, track_type = null, track_loop = null, channel_id = null, track_start = null, track_pause = null, queue = null
@@ -263,7 +263,7 @@ export default class MusicSubscription {
 			this.audioPlayer.play(resource);
 			this.queueLock = false;
 			
-			db.query({
+			db.pool.query({
 				text: `
 					UPDATE servers
 					SET track_location = $2, track_type = $3, track_loop = $4, channel_id = $5, track_start = $6
@@ -273,7 +273,7 @@ export default class MusicSubscription {
 			});
 
 			if (!this.paused) {
-				db.query({ 
+				db.pool.query({ 
 					text: `
 						UPDATE servers
 						SET track_pause = null

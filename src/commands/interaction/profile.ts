@@ -18,8 +18,7 @@ export default {
 	global: true,
 	async execute(interaction: CommandInteraction) {
 		const user = await (interaction.options.getUser('user') || interaction.user).fetch(true);
-
-		const { rows: dbUserRows } = await db.query({
+		const { rows: dbUserRows } = await db.pool.query({
 			text: `
 				SELECT *
 				FROM users
@@ -30,7 +29,7 @@ export default {
 
 		const dbUser = dbUserRows[0];
 
-		const { rows: dbSongPlaysRows } = await db.query({
+		const { rows: dbSongPlaysRows } = await db.pool.query({
 			text: `
 				SELECT *
 				FROM song_plays

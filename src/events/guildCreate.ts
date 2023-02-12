@@ -5,7 +5,7 @@ export default {
 	name: 'guildCreate',
 	once: false,
 	execute(guild: Guild) {
-		db.query({
+		db.pool.query({
 			text: `
 			INSERT INTO guilds (id)
 			VALUES ($1)

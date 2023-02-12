@@ -20,7 +20,7 @@ export default {
 
 		const curl = new URL(url); 
 
-		db.query({
+		db.pool.query({
 			text: `
 					UPDATE options
 					SET value = $1

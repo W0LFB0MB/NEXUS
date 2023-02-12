@@ -130,7 +130,7 @@ export default {
 					subscription!.enqueue(track);
 					interaction.followUp(`Enqueued **${track.title}**`);
 
-					db.query({
+					db.pool.query({
 						text: `
 							INSERT INTO users (id, songs_played) VALUES ($1, 1)
 							ON CONFLICT (id) DO
@@ -139,7 +139,7 @@ export default {
 						values: [interaction.user.id]
 					}).then(() => {
 						if (track.type == TrackType.youtube) {
-							db.query({
+							db.pool.query({
 								text: `
 									INSERT INTO song_plays (user_id, song_url) VALUES ($1, $2)
 									ON CONFLICT (user_id, song_url) DO

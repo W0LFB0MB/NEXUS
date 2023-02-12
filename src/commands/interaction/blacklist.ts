@@ -46,7 +46,7 @@ export default {
 			permissionsMiddleware(interaction, Buffer.from('000', 'binary'), async () => {
 				const blacklist = mode === 'add' ? true : false;
 
-				db.query({
+				db.pool.query({
 					text: `
 							INSERT INTO users (id)
 							VALUES ($1)
@@ -55,7 +55,7 @@ export default {
 					values: [user]
 				});
 
-				db.query({
+				db.pool.query({
 					text: `
 							INSERT INTO servers_users (users_id, servers_id)
 							VALUES ($1, $2)
@@ -70,7 +70,7 @@ export default {
 		} else {
 			interaction.deferReply();
 
-			const { rows } = await db.query({
+			const { rows } = await db.pool.query({
 				text: `
 						SELECT blacklisted
 						FROM servers_users

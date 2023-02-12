@@ -25,7 +25,7 @@ export default {
 		startupEmbed.setFooter({ text: `${Bot.loadMs}ms` });
 		BotStartChannel.send({ embeds: [startupEmbed] });
 
-		const { rows: activityAndStatusRows } = await db.query({
+		const { rows: activityAndStatusRows } = await db.pool.query({
 			text: `
 				SELECT *
 				FROM options
@@ -45,7 +45,7 @@ export default {
 
 		// // //CRASH RECOVERY
 
-		// const { rows: [{ value: crashTimestamp }] }: { rows: Array<{ value: string }>} = await db.query({
+		// const { rows: [{ value: crashTimestamp }] }: { rows: Array<{ value: string }>} = await db.pool.query({
 		// 	text: `
 		// 		SELECT value
 		// 		FROM options
@@ -71,7 +71,7 @@ export default {
 		// 		track_loop: number,
 		// 		channel_id: string,
 		// 	}>
-		// } = await db.query({
+		// } = await db.pool.query({
 		// 	text: `
 		// 		SELECT id, track_location, track_type, track_start, track_pause, queue, track_loop, channel_id
 		// 		FROM servers

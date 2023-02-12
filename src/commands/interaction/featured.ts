@@ -9,7 +9,7 @@ export default {
 	options: [],
 	global: true,
 	async execute(interaction: CommandInteraction) {
-		const { rows } = await db.query({
+		const { rows } = await db.pool.query({
 			text: `
 						SELECT value
 						FROM options
