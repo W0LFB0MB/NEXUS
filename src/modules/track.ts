@@ -52,7 +52,7 @@ export default class Track implements TrackData {
 			const format = ytdlc.filterFormats(info.formats, 'audioonly')[0];
 
 			const ytstream = ytdlc(this.location, {
-				format: format,
+				// format: format,
 				quality: 'highestaudio',
 				highWaterMark: 1 << 62,
 				liveBuffer: 1 << 62,
