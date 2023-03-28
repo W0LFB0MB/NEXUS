@@ -55,7 +55,7 @@ export default class Logger {
 		if (!fs.existsSync(`${this.directory}/`)) {
 			fs.mkdirSync(this.directory);
 		} else {
-			fs.rmSync(`${this.directory}/latest.log`);
+			if (fs.existsSync(`${this.directory}/latest.log`)) fs.rmSync(`${this.directory}/latest.log`);
 		}
 	}
 
