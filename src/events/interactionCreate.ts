@@ -1,5 +1,6 @@
 import { Interaction/*, GuildMember*/, CommandInteraction, ApplicationCommandOptionData, ApplicationCommandType } from 'discord.js';
 import fs from 'fs';
+import Logger from './../modules/logger.js';
 
 export const commands: Array<{
 	name: string,
@@ -13,11 +14,11 @@ export const commands: Array<{
 const commandURL = new URL('../commands/interaction', import.meta.url);
 const commandFiles = fs.readdirSync(commandURL).filter(file => file.endsWith('.js'));
 
-console.log('--- LOADING INTERACTIONS ---');
+Logger.info('--- LOADING INTERACTIONS ---');
 for (const file of commandFiles) {
-	console.log(file);
+	Logger.trace(file);
 	const { default: command } = await import(`${commandURL.href}/${file}`);
-	console.log(`Interaction <${command.name}> loaded! ${!command.global ? 'HIDDEN' : ''}`);
+	Logger.debug(`Interaction <${command.name}> loaded!${!command.global ? ' HIDDEN' : ''}`);
 	commands.push(command);
 }
 
@@ -43,7 +44,7 @@ export default {
 
 		for (const command of commands) {
 			if (interaction.commandName !== command.name) continue;
-			console.log(command.name);
+			Logger.debug(command.name);
 			foundCommand = true;
 			if (!command.global && interaction.user.id !== Bot.client.application?.owner?.id) {
 				interaction.reply('Access Denied');
