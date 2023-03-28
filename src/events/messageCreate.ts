@@ -1,5 +1,6 @@
 import { Message } from 'discord.js';
 import fs from 'fs';
+import Logger from '../modules/logger.js';
 
 export const commands: Array<{
 	name: string,
@@ -10,10 +11,10 @@ export const commands: Array<{
 const commandURL = new URL('../commands/message', import.meta.url);
 const commandFiles = fs.readdirSync(commandURL).filter(file => file.endsWith('.js'));
 
-console.log('--- LOADING COMMANDS ---');
+Logger.info('--- LOADING COMMANDS ---');
 for (const file of commandFiles) {
 	const { default: command } = await import(`${commandURL.href}/${file}`);
-	console.log(`Command <${command.name}> loaded! ${!command.restricted ? 'RESTRICTED' : ''}`);
+	Logger.debug(`Command <${command.name}> loaded! ${!command.restricted ? 'RESTRICTED' : ''}`);
 	commands.push(command);
 }
 
@@ -31,7 +32,7 @@ export default {
 
 		if (message.content.toLowerCase().startsWith(Bot.config.CommandPrefix)) { // check if message is actually a command
 			const messageCommand = message.content.slice(Bot.config.CommandPrefix.length).split(' ')[0].toLowerCase(); // get command keyword e.g. deploy instead of n!deploy awdawd
-			console.log(messageCommand);
+			Logger.trace(messageCommand);
 			let foundCommand = false;
 
 			for (const command of commands) {
