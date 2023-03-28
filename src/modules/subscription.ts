@@ -13,12 +13,13 @@ import Track from './track.js';
 import { promisify } from 'util';
 
 import db from '../modules/database.js';
+import Logger from '../modules/logger.js';
 
-export const LoopType = Object.freeze({
-	none: 0,
-	track: 1,
-	queue: 2,
-});
+export enum LoopType {
+	none = 0,
+	track = 1,
+	queue = 2,
+}
 
 const wait = promisify(setTimeout);
 
@@ -258,7 +259,7 @@ export default class MusicSubscription {
 			// Attempt to convert the Track into an AudioResource (i.e. start streaming the video)
 			const resource = await nextTrack.createAudioResource();
 			// const resource = this.audioPlayer.res
-			console.log(resource.metadata);
+			Logger.debug(resource.metadata.toString());
 			
 			this.audioPlayer.play(resource);
 			this.queueLock = false;
