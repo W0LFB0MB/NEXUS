@@ -54,7 +54,7 @@ export default {
 		// });
 
 		// if (!crashTimestamp || (Date.now() - parseInt(crashTimestamp)) > (30 * 1000)) return; //if no timestamp or crashed more than 30 seconds ago return
-		// console.log('crash recovery');
+		// Logger.info('crash recovery');
 
 		// const { rows: servers } : {
 		// 	rows: Array<{
@@ -81,7 +81,7 @@ export default {
 
 		// servers.forEach(async server => {
 		// 	if (server.id !== '799255751713095720') return;
-		// 	console.log('s');
+		// 	Logger.trace('s');
 		// 	const guild = await Bot.client.guilds.fetch(server.id);
 
 		// 	const subscription = new MusicSubscription(
@@ -103,11 +103,11 @@ export default {
 		// 		Track.fromUrl(`https://www.youtube.com/watch?v=${server.track_location}`, {
 		// 			onStart() {
 		// 				// interaction.followUp({ content: 'Now playing!', ephemeral: false }).catch(console.warn);
-		// 				console.log('a');
+		// 				Logger.trace('a');
 		// 			},
 		// 			onFinish() {
 		// 				// interaction.followUp({ content: 'Now finished!', ephemeral: true }).catch(console.warn); // not required, caused extra spam
-		// 				console.log('b');
+		// 				Logger.trace('b');
 		// 			},
 		// 			onError(error: Error) {
 		// 				console.error(error);
@@ -116,7 +116,7 @@ export default {
 		// 		}).then(async track => {
 		// 			// Enqueue the track and reply a success message to the user
 		// 			const playFrom = (((server.track_pause === null ? parseInt(crashTimestamp) : parseInt(server.track_pause)) - parseInt(server.track_start)) / 1000);
-		// 			console.log(playFrom);
+		// 			Logger.trace(playFrom);
 		// 			subscription.audioPlayer.play(await track.createAudioResource(playFrom));
 		// 			if (server.track_pause !== null) subscription.paused = true;
 		// 		});
