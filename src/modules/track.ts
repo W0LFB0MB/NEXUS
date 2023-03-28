@@ -8,6 +8,7 @@ import ffmpeg from 'fluent-ffmpeg';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import he from 'he';
 import { Readable, Writable } from 'stream';
+import Logger from '../modules/logger.js';
 const getInfo = ytdlc.getInfo;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -84,21 +85,21 @@ export default class Track implements TrackData {
 						.audioBitrate(format.audioBitrate!)
 						.seek(Math.ceil(seekTime))
 						.output(ws)
-						.on('codecData', function (data) {
-							console.log('Input is ' + data.audio + ' audio ' +
+						.on('codecData', (data) => {
+							Logger.trace('Input is ' + data.audio + ' audio ' +
 								'with ' + data.video + ' video');
 						})
-						.on('stderr', function (stderrLine) {
-							console.log('Stderr output: ' + stderrLine);
+						.on('stderr', (stderrLine) => {
+							Logger.error('Stderr output: ' + stderrLine, undefined);
 						})
 						.on('start', () => {
-							console.log('ffmpeg start');
+							Logger.trace('ffmpeg start');
 						})
 						.on('progress', (info) => {
-							console.log('progress ' + info.percent + '%');
+							Logger.trace('progress ' + info.percent + '%');
 						})
 						.on('error', (err) => {
-							console.log('An error occurred: ' + err.message);
+							Logger.error('An error occurred: ' + err.message, err.trace);
 							reject(err);
 						})
 						.on('end', () => {
