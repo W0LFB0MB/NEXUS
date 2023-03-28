@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '../.env'});
 
 import Discord, { Snowflake, GatewayIntentBits, Client } from 'discord.js';
-import db from './modules/database.js';
 import MusicSubscription from './modules/subscription.js';
+import Logger from './modules/logger.js';
 import fs from 'fs';
 
 const intents = [
@@ -34,7 +34,7 @@ export default class Bot {
 	public static get loadMs(): number { return Bot._loadMs; }
 
 	static {
-		console.log('BOT STARTED');
+		Logger.info('BOT STARTED');
 		this.client = new Discord.Client({ intents: intents });
 		this.subscriptions = new Map<Snowflake, MusicSubscription>();
 
@@ -45,7 +45,7 @@ export default class Bot {
 
 		(async () => { //to allow async loading
 			for (const file of eventFiles) {
-				console.log(`ADDING EVENT LISTENER - ${file.split('.')[0].toUpperCase()}`);
+				Logger.debug(`ADDING EVENT LISTENER - ${file.split('.')[0].toUpperCase()}`);
 
 				const {default: event} = await import(`${eventURL.href}/${file}`);
 
@@ -56,7 +56,7 @@ export default class Bot {
 				}
 			}
 			this._loadMs = Date.now() - startTime;
-			console.log(`EVENTS LOADED - ${this._loadMs}ms`);
+			Logger.info(`EVENTS LOADED - ${this._loadMs}ms`);
 		})();
 
 
@@ -65,50 +65,40 @@ export default class Bot {
 }
 
 
-//SAVING CRASH TIMESTAMP TO DATABASE
+function SaveCrashData(cause: string, details: string) {
+	const directory = 'crash/';
+	if (!fs.existsSync(directory)) {
+		fs.mkdirSync(directory);
+	}
 
-const crashTimestampLog = () => db.pool.query({
-	text: `
-		UPDATE options
-		SET value = $1
-		WHERE option = 'crashedTime'
-	`,
-	values: [Date.now()]
-});
+	const crashData = JSON.stringify({ timestamp: Date.now(), cause: cause, details: details });
+	fs.writeFileSync(directory+'latest', crashData);
+	fs.writeFileSync(`${directory}${Date.now()}`, crashData);
+}
 
-process.on('beforeExit', async code => {
-	// Can make asynchronous calls
-	crashTimestampLog();
-	console.log(`Process will exit with code: ${code}`);
-	process.exit(code);
-});
-
-process.on('exit', async code => {
-	// Only synchronous calls
-	crashTimestampLog();
-	console.log(`Process exited with code: ${code}`);
-});
-
-process.on('SIGTERM', async () => {
-	crashTimestampLog();
-	console.log(`Process ${process.pid} received a SIGTERM signal`);
-	process.exit(0);
-});
-
-process.on('SIGINT', async () => {
-	crashTimestampLog();
-	console.log(`Process ${process.pid} has been interrupted`);
-	process.exit(0);
-});
-
-process.on('uncaughtException', async err => {
-	crashTimestampLog();
-	console.log(`Uncaught Exception: ${err.message}`);
-	process.exit(1);
-});
-
-process.on('unhandledRejection', async (reason, promise) => {
-	crashTimestampLog();
-	console.log('Unhandled rejection at ', promise, `reason: ${reason}`);
-	process.exit(1);
-});
+process
+	.on('exit', code => {
+		Bot.client.user?.setStatus('invisible');
+		Logger.info(`Process exited with code: ${code}`);
+		Logger.saveLogs();
+	})
+	.on('SIGTERM', () => {
+		SaveCrashData('SIGTERM', '');
+		Logger.info('Received a SIGTERM signal');
+		process.exit(0);
+	})
+	.on('SIGINT', () => {
+		SaveCrashData('SIGINT', '');
+		Logger.info('Received a SIGINT signal');
+		process.exit(0);
+	})
+	.on('uncaughtException', err => {
+		SaveCrashData('uncaughtException', err.toString());
+		Logger.fatal(`Uncaught Exception: ${err}`, err.stack);
+		process.exit(1);
+	})
+	.on('unhandledRejection', (reason: Error, promise) => {
+		SaveCrashData('unhandledRejection', reason.toString());
+		Logger.info(`Unhandled rejection at ${promise}, reason: ${reason}`);
+		process.exit(1);
+	});
