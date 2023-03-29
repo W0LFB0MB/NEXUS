@@ -1,5 +1,4 @@
 'use strict';
-
 import ytdlc from 'ytdl-core';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AudioResource, createAudioResource, demuxProbe, StreamType } from '@discordjs/voice';
@@ -54,7 +53,8 @@ export default class Track implements TrackData {
 
 			const ytstream = ytdlc(this.location, {
 				// format: format,
-				quality: 'highestaudio',
+				// quality: 'highestaudio',
+				filter: 'audioonly',
 				highWaterMark: 1 << 62,
 				liveBuffer: 1 << 62,
 				dlChunkSize: 0, //disabling chunking is recommended in discord bot
@@ -198,7 +198,7 @@ export default class Track implements TrackData {
 					const id = JSON.parse(data.toString()).items[0].id.videoId;
 
 					if (id === undefined || id === null || id === 'undefined') return reject('no id');
-					
+
 					resolve(
 						new Track({
 							type: TrackType.youtube,
