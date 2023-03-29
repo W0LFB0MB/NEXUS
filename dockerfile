@@ -1,13 +1,9 @@
 FROM node:18
 
-# ARG BOT_TOKEN
-# ENV BOT_TOKEN=$BOT_TOKEN
-
-# ARG DATABASE_URL
-# ENV DATABASE_URL=$DATABASE_URL
-
-# ARG YOUTUBE_API_KEY
-# ENV YOUTUBE_API_KEY=$YOUTUBE_API_KEY
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+ENTRYPOINT ["/tini", "--"]
 
 WORKDIR /nexus-bot
 
@@ -28,6 +24,5 @@ RUN rm -rf ./src
 COPY config.json config.json
 COPY ./images ./images
 COPY ./audio ./audio
-COPY .env .env
 
 CMD ["npm", "run", "start"]
