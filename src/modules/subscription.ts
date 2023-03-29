@@ -6,6 +6,7 @@ import {
 	entersState,
 	VoiceConnection,
 	VoiceConnectionDisconnectReason,
+	VoiceConnectionState,
 	VoiceConnectionStatus
 } from '@discordjs/voice';
 import { Guild, VoiceChannel } from 'discord.js';
@@ -80,7 +81,18 @@ export default class MusicSubscription {
 		this.audioPlayer = createAudioPlayer();
 		this.voiceConnection = voiceConnection;
 
-		this.voiceConnection.on('stateChange', async (_, newState) => {
+		this.voiceConnection.on('stateChange', async (oldState, newState) => {
+			const oldNetworking = Reflect.get(oldState, 'networking');
+			const newNetworking = Reflect.get(newState, 'networking');
+
+			const networkStateChangeHandler = (oldNetworkState: VoiceConnectionState, newNetworkState: VoiceConnectionState) => {
+				const newUdp = Reflect.get(newNetworkState, 'udp');
+				clearInterval(newUdp?.keepAliveInterval);
+			};
+
+			oldNetworking?.off('stateChange', networkStateChangeHandler);
+			newNetworking?.on('stateChange', networkStateChangeHandler);
+
 			if (newState.status === VoiceConnectionStatus.Disconnected) {
 				if (newState.reason === VoiceConnectionDisconnectReason.WebSocketClose && newState.closeCode === 4014) {
 					/*
@@ -137,7 +149,7 @@ export default class MusicSubscription {
 
 		// Configure audio player
 		this.audioPlayer.on('stateChange', (oldState, newState) => {
-			const timeOutMs = 5 * 60 * 1000;
+			const timeOutMs = 5 * 60 * 1000; // 5 minutes
 			this._stateChange = Date.now();
 
 			if (newState.status === AudioPlayerStatus.Idle && !this.persistant) {
