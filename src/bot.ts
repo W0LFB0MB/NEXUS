@@ -80,7 +80,7 @@ process
 	.on('exit', code => {
 		Bot.client.user?.setStatus('invisible');
 		Logger.info(`Process exited with code: ${code}`);
-		Logger.saveLogs();
+		Logger.saveToFile();
 	})
 	.on('SIGTERM', () => {
 		SaveCrashData('SIGTERM', '');
