@@ -22,8 +22,7 @@ class Log {
 	}
 
 	toString(): string {
-		const extraSpacing = ' '.repeat(5 - this.severity.length);
-		return `${this.timestamp} [${this.severity}]${extraSpacing} : ${this.message}`;
+		return JSON.stringify(this);
 	}
 
 	toConsoleString(): string {
@@ -59,42 +58,70 @@ export default class Logger {
 		}
 	}
 
+	/**
+	 * Adds a new log
+	 *
+	 * @param {LogSeverity} severity - Log severity
+	 * @param {string} message - Log message
+	 * @param {string | undefined} stack - Stack trace
+	 */
 	public static log(severity: LogSeverity, message: string, stack: string | undefined): void {
 		const log = new Log(severity, message, stack);
 		this.logs.push(log);
-		fs.appendFileSync(`${this.directory}/latest.log`, log.toString() + '\r\n');
+		this.saveToFile();
 		console.log(log.toConsoleString());
 	}
 
+	/**
+	 * Adds a new trace log to logger
+	 *
+	 * @param {string} message - Log message
+	 */
 	public static trace = (message: string): void => this.log(LogSeverity.TRACE, message, undefined);
+	/**
+	 * Adds a new debug log to logger
+	 *
+	 * @param {string} message - Log message
+	 */
 	public static debug = (message: string): void => this.log(LogSeverity.DEBUG, message, undefined);
+	/**
+	 * Adds a new info log to logger
+	 *
+	 * @param {string} message - Log message
+	 */
 	public static info = (message: string): void => this.log(LogSeverity.INFO, message, undefined);
+	/**
+	 * Adds a new warning log to logger
+	 *
+	 * @param {string} message - Log message
+	 */
 	public static warn = (message: string): void => this.log(LogSeverity.WARN, message, undefined);
+	/**
+	 * Adds a new error log to logger
+	 *
+	 * @param {string} message - Log message
+	 * @param {string | undefined} trace - Stack trace
+	 */
 	public static error = (message: string, trace: string | undefined): void => this.log(LogSeverity.ERROR, message, trace);
+	/**
+	 * Adds a new fatal log to logger
+	 *
+	 * @param {string} message - Log message
+	 * @param {string | undefined} trace - Stack trace
+	 */
 	public static fatal = (message: string, trace: string | undefined): void => this.log(LogSeverity.FATAL, message, trace);
 
-	public static toString(): string {
-		let logString = '';
+	/**
+	 * Saves logs to the logs directory
+	 */
+	public static saveToFile(): void {
+		let logJson = '{\r\n';
+		logJson += `\t"startTimestamp":${this.instantiated},\r\n\t"endTimestamp":${Date.now()},\r\n`;
+		logJson += '\t"logs":[\r\n';
+		this.logs.forEach(log => logJson += `\t\t${log.toString()},\r\n`);
+		logJson += '\t]\r\n}';
 
-		this.logs.forEach(log => {
-			logString += `${log.toString()}\r\n`;
-		});
-
-		return logString;
-	}
-
-	public static saveLogs(): void {
-		//const logString = `\r\n## START OF LOGS - ${this.instantiated} ##\r\n` + this.toString() + `\r\n## END OF LOGS - ${Date.now()} ##\r\n`;
-
-		let logString = '[\r\n';
-
-		this.logs.forEach(log => {
-			logString += '	' + JSON.stringify(log) + ',\r\n';
-		});
-
-		logString += ']';
-
-		fs.writeFileSync(`${this.directory}/latest.log`, logString);
-		fs.writeFileSync(`${this.directory}/${this.instantiated}.log`, logString);
+		fs.writeFileSync(`${this.directory}/latest.log`, logJson);
+		fs.writeFileSync(`${this.directory}/${this.instantiated}.log`, logJson);
 	}
 }
