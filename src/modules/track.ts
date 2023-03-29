@@ -52,9 +52,7 @@ export default class Track implements TrackData {
 			const format = ytdlc.filterFormats(info.formats, 'audioonly')[0];
 
 			const ytstream = ytdlc(this.location, {
-				// format: format,
-				// quality: 'highestaudio',
-				filter: 'audioonly',
+				format: info.formats.filter(format => format.hasAudio).find(format => !format.hasVideo),
 				highWaterMark: 1 << 62,
 				liveBuffer: 1 << 62,
 				dlChunkSize: 0, //disabling chunking is recommended in discord bot
