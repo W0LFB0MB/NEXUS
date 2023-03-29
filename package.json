@@ -9,7 +9,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node -r dotenv/config ."
+    "start": "node -r dotenv/config .",
+    "dockerize": "docker build . -t w0lfb0mb/nexus-bot"
   },
   "repository": {
     "type": "git",
