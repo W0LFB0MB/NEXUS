@@ -1,4 +1,4 @@
-import { Interaction/*, GuildMember*/, CommandInteraction, ApplicationCommandOptionData, ApplicationCommandType } from 'discord.js';
+import { Interaction/*, GuildMember*/, CommandInteraction, ApplicationCommandOptionData, ApplicationCommandType, ButtonInteraction, ModalBuilder, TextInputBuilder } from 'discord.js';
 import fs from 'fs';
 import Logger from './../modules/logger.js';
 
@@ -26,34 +26,43 @@ export default {
 	name: 'interactionCreate',
 	once: false,
 	async execute(interaction: Interaction) {
-		if (!interaction.isCommand()) return;
-		if (!interaction.guildId) return interaction.reply({content: 'Direct message Interactions are disabled.', ephemeral: true});
+		if (interaction.isCommand()) CommandInteractionHandler(interaction);
+		if (interaction.isButton()) ButtonInteractionHandler(interaction);
+	}
+		
+};
 
-		const { default: Bot } = await import('../bot.js');
+async function CommandInteractionHandler(interaction: CommandInteraction) {
+	if (!interaction.guildId) return interaction.reply({ content: 'Direct message Interactions are disabled.', ephemeral: true });
 
-		if (!Bot.client.application?.owner) await Bot.client.application?.fetch();
-		if (!(process.env._ && process.env._.indexOf('heroku') !== -1) && interaction.user.id !== Bot.client.application?.owner?.id) return interaction.reply({content: '🦊', ephemeral: true});
-		// if (interaction.user.id !== client.application?.owner?.id) {
-		// 	if (interaction.member instanceof GuildMember) {
-		// 		await interaction.followUp('Currently under maintenence, try again later.');
-		// 	}
-		// 	return;
-		// }
+	const { default: Bot } = await import('../bot.js');
 
-		let foundCommand = false;
+	if (!Bot.client.application?.owner) await Bot.client.application?.fetch();
+	if (!(process.env._ && process.env._.indexOf('heroku') !== -1) && interaction.user.id !== Bot.client.application?.owner?.id) return interaction.reply({ content: '🦊', ephemeral: true });
+	// if (interaction.user.id !== client.application?.owner?.id) {
+	// 	if (interaction.member instanceof GuildMember) {
+	// 		await interaction.followUp('Currently under maintenence, try again later.');
+	// 	}
+	// 	return;
+	// }
 
-		for (const command of commands) {
-			if (interaction.commandName !== command.name) continue;
-			Logger.debug(command.name);
-			foundCommand = true;
-			if (!command.global && interaction.user.id !== Bot.client.application?.owner?.id) {
-				interaction.reply('Access Denied');
-				break;
-			}
-			command.execute(interaction);
+	let foundCommand = false;
+
+	for (const command of commands) {
+		if (interaction.commandName !== command.name) continue;
+		Logger.debug(command.name);
+		foundCommand = true;
+		if (!command.global && interaction.user.id !== Bot.client.application?.owner?.id) {
+			interaction.reply('Access Denied');
 			break;
 		}
-
-		if (!foundCommand) interaction.reply('Unknown command');
+		command.execute(interaction);
+		break;
 	}
-};
+
+	if (!foundCommand) interaction.reply('Unknown command');
+}
+
+function ButtonInteractionHandler(interaction: ButtonInteraction) {
+	return interaction; // UNUSED
+}
