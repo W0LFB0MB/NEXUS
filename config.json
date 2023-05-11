@@ -1,3 +1,4 @@
 {
-	"commandPrefix": "n!"
+	"commandPrefix": "n!",
+	"themeHex": "#4a54fc"
 }
