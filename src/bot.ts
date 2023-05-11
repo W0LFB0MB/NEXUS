@@ -99,6 +99,6 @@ process
 	})
 	.on('unhandledRejection', (reason: Error, promise) => {
 		SaveCrashData('unhandledRejection', reason.toString());
-		Logger.info(`Unhandled rejection at ${promise}, reason: ${reason}`);
+		Logger.fatal(`Unhandled rejection at ${promise}, reason: ${reason}`, reason.stack);
 		process.exit(1);
 	});
