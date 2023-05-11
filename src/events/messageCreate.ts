@@ -29,24 +29,23 @@ export default {
 
 		if (!Bot.client.application?.owner) await Bot.client.application?.fetch();
 		if (!(process.env._ && process.env._.indexOf('heroku') !== -1) && message.author.id !== Bot.client.application?.owner?.id) return;
+		if (!message.content.toLowerCase().startsWith(Bot.config.commandPrefix)) return; // check if message is actually a command
+		const messageCommand = message.content.slice(Bot.config.commandPrefix.length).split(' ')[0].toLowerCase(); // get command keyword e.g. deploy instead of n!deploy awdawd
+		Logger.trace(messageCommand);
+		let foundCommand = false;
 
-		if (message.content.toLowerCase().startsWith(Bot.config.CommandPrefix)) { // check if message is actually a command
-			const messageCommand = message.content.slice(Bot.config.CommandPrefix.length).split(' ')[0].toLowerCase(); // get command keyword e.g. deploy instead of n!deploy awdawd
-			Logger.trace(messageCommand);
-			let foundCommand = false;
-
-			for (const command of commands) {
-				if (messageCommand !== command.name) continue;
-				foundCommand = true;
-				if (command.restricted && message.author.id !== Bot.client.application?.owner?.id) {
-					message.reply('Access Denied');
-					break; 
-				}
-				command.execute(message);
-				break;
+		for (const command of commands) {
+			if (messageCommand !== command.name) continue;
+			foundCommand = true;
+			if (command.restricted && message.author.id !== Bot.client.application?.owner?.id) {
+				message.reply('Access Denied');
+				break; 
 			}
-
-			if (!foundCommand) message.reply('Unknown command.');
+			command.execute(message);
+			break;
 		}
+
+		if (!foundCommand) message.reply('Unknown command.');
+		
 	}
 };
