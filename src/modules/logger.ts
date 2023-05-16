@@ -9,6 +9,12 @@ export enum LogSeverity {
 	FATAL = 'FATAL',
 }
 
+export interface LogFile {
+	startTimestamp: number,
+	endTimestamp: number,
+	logs: Array<Log>
+}
+
 class Log {
 	public readonly timestamp = Date.now();
 	public readonly severity: LogSeverity;
@@ -118,7 +124,11 @@ export default class Logger {
 		let logJson = '{\r\n';
 		logJson += `\t"startTimestamp":${this.instantiated},\r\n\t"endTimestamp":${Date.now()},\r\n`;
 		logJson += '\t"logs":[\r\n';
-		this.logs.forEach(log => logJson += `\t\t${log.toString()},\r\n`);
+		this.logs.forEach((log, index) => {
+			logJson += `\t\t${log.toString()}`;
+			if (index + 1 < this.logs.length) logJson += ',';
+			logJson += '\r\n';
+		});
 		logJson += '\t]\r\n}';
 
 		fs.writeFileSync(`${this.directory}/latest.log`, logJson);
