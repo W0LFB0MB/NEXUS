@@ -46,6 +46,5 @@ export default {
 		}
 
 		if (!foundCommand) message.reply('Unknown command.');
-		
 	}
 };
