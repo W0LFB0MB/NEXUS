@@ -6,6 +6,7 @@ import MusicSubscription from '../../modules/subscription.js';
 import musicMiddleware from '../../modules/middleware/musicMiddleware.js';
 import Track, { TrackType } from '../../modules/track.js';
 import db from '../../modules/database.js';
+import Logger from '../../modules/logger.js';
 
 export default {
 	name: 'play',
@@ -69,7 +70,7 @@ export default {
 				//playlist code
 				// if (isUrl) {
 				// 	const playlistId = getYoutubePlaylistId(toQueue);
-				// 	console.log('pid', playlistId);
+				// 	Logger.debug('pid', playlistId);
 
 				// 	// if (playlistId) {
 				// 	// 	getYoutubePlaylistItems(playlistId).then(async playlistItems => {
@@ -110,7 +111,7 @@ export default {
 				// }
 
 				const trackCreator = isUrl ? Track.fromUrl : Track.fromTitle;
-				console.log('isUrl = '+isUrl);
+				Logger.debug('isUrl = '+isUrl);
 
 
 				// Attempt to create a Track from the user's video URL
