@@ -1,9 +1,6 @@
 process.title = 'NEXUS BOT';
 
-import dotenv from 'dotenv';
-dotenv.config({ path: '../.env'});
-
-import Discord, { Snowflake, GatewayIntentBits, Client } from 'discord.js';
+import Discord, { Snowflake, GatewayIntentBits, Client, ColorResolvable } from 'discord.js';
 import MusicSubscription from './modules/subscription.js';
 import Logger from './modules/logger.js';
 import fs from 'fs';
@@ -26,10 +23,16 @@ const intents = [
 	GatewayIntentBits.MessageContent,
 ];
 
+interface ConfigFile {
+	commandPrefix: string,
+	themeHex: ColorResolvable
+}
+
 export default class Bot {
 	public static client: Client;
 	public static subscriptions: Map<Snowflake, MusicSubscription>;
-	public static readonly config = JSON.parse(fs.readFileSync('config.json').toString());
+	public static readonly config: ConfigFile = JSON.parse(fs.readFileSync('config.json').toString());
+	public static readonly startTime: number = Date.now();
 	private static _loadMs: number;
 	public static get loadMs(): number { return Bot._loadMs; }
 
@@ -40,8 +43,6 @@ export default class Bot {
 
 		const eventURL = new URL('events', import.meta.url);
 		const eventFiles = fs.readdirSync(eventURL).filter(file => file.endsWith('.js'));
-
-		const startTime = Date.now();
 
 		(async () => { //to allow async loading
 			for (const file of eventFiles) {
@@ -55,7 +56,7 @@ export default class Bot {
 					this.client.on(event.name, (...args) => event.execute(...args));
 				}
 			}
-			this._loadMs = Date.now() - startTime;
+			this._loadMs = Date.now() - this.startTime;
 			Logger.info(`EVENTS LOADED - ${this._loadMs}ms`);
 		})();
 
@@ -97,7 +98,7 @@ process
 		Logger.fatal(`Uncaught Exception: ${err}`, err.stack);
 		process.exit(1);
 	})
-	.on('unhandledRejection', (reason: Error, promise) => {
+	.on('unhandledRejection', (reason: Error, promise: Promise<unknown>) => {
 		SaveCrashData('unhandledRejection', reason.toString());
 		Logger.fatal(`Unhandled rejection at ${promise}, reason: ${reason}`, reason.stack);
 		process.exit(1);
