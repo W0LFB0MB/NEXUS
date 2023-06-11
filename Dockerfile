@@ -22,6 +22,5 @@ RUN rm -rf ./src
 
 
 COPY config.json config.json
-COPY ./images ./images
 
 CMD ["npm", "run", "start"]
