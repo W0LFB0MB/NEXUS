@@ -1,4 +1,4 @@
-# NEXUS [![Node.js CI](https://github.com/W0LFB0MB/NEXUS/actions/workflows/node.js.yml/badge.svg)](https://github.com/W0LFB0MB/NEXUS/actions/workflows/node.js.yml)
+# NEXUS [![Node.js CI](https://github.com/W0LFB0MB/NEXUS/actions/workflows/node.js.yml/badge.svg)](https://github.com/W0LFB0MB/NEXUS/actions/workflows/node.js.yml) [![Docker Image CI](https://github.com/W0LFB0MB/NEXUS/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/W0LFB0MB/NEXUS/actions/workflows/docker-image.yml)
 
 A discord bot for the vibes!
 
