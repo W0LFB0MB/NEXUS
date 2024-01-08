@@ -8,6 +8,6 @@ export default {
 		const subscription = Bot.subscriptions.get(message.guildId!);
 		if (!subscription) return message.reply ('nah');
 		subscription.persistant = !subscription.persistant;
-		message.reply(subscription.persistant ? 'Persistance Enabled' : 'Persistance Disabled');
+		message.reply(`Persistance ${subscription.persistant ? 'Enabled' : 'Disabled'}`);
 	}
 };

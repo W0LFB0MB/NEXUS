@@ -49,65 +49,65 @@ export default class Track implements TrackData {
 	public async createAudioResource(seekTime?: number): Promise<AudioResource<Track>> {
 		if (this.type === TrackType.youtube) {
 			const info = await ytdlc.getInfo(this.location);
-			const format = ytdlc.filterFormats(info.formats, 'audioonly')[0];
+			// const aformat = ytdlc.filterFormats(info.formats, 'audioonly')[0];
 
 			const ytstream = ytdlc(this.location, {
-				format: info.formats.filter(format => format.hasAudio).find(format => !format.hasVideo),
-				highWaterMark: 1 << 62,
-				liveBuffer: 1 << 62,
-				dlChunkSize: 0, //disabling chunking is recommended in discord bot
+				quality: 'highestaudio',
+				highWaterMark: 1 << 25,
+				dlChunkSize: 0,
 			});
 
-			if (seekTime !== undefined) {
-				return new Promise((resolve, reject) => {
+			return createAudioResource(ytstream, { metadata: this, inputType: StreamType.Arbitrary });
+			// if (seekTime !== undefined) {
+			// 	return new Promise((resolve, reject) => {
 
-					const rs = new Readable({
-						read(this: Readable) {
-							return true;
-						}
-					});
+			// 		const rs = new Readable({
+			// 			read(this: Readable) {
+			// 				return true;
+			// 			}
+			// 		});
 
-					const ws = new Writable({
-						write(this: Writable, chunk: unknown, encoding: BufferEncoding, callback: (error?: Error | null | undefined) => void) {
-							rs.push(chunk);
-							callback();
-						}
-					});
+			// 		const ws = new Writable({
+			// 			write(this: Writable, chunk: unknown, encoding: BufferEncoding, callback: (error?: Error | null | undefined) => void) {
+			// 				rs.push(chunk);
+			// 				callback();
+			// 			}
+			// 		});
 
-					ffmpeg()
-						.setFfmpegPath('C:\\ffmpeg\\bin\\ffmpeg.exe')
-						.input(ytstream)
-						.inputOptions('-thread_queue_size 16384')
-						.format(format.container)
-						.audioCodec(format.audioCodec!)
-						.audioBitrate(format.audioBitrate!)
-						.seek(Math.ceil(seekTime))
-						.output(ws)
-						.on('codecData', (data) => {
-							Logger.trace('Input is ' + data.audio + ' audio ' +
-								'with ' + data.video + ' video');
-						})
-						.on('stderr', (stderrLine) => {
-							Logger.error('Stderr output: ' + stderrLine, undefined);
-						})
-						.on('start', () => {
-							Logger.trace('ffmpeg start');
-						})
-						.on('progress', (info) => {
-							Logger.trace('progress ' + info.percent + '%');
-						})
-						.on('error', (err) => {
-							Logger.error('An error occurred: ' + err.message, err.trace);
-							reject(err);
-						})
-						.on('end', () => {
-							resolve(createAudioResource(rs, { metadata: this, inputType: StreamType.WebmOpus }));
-						})
-						.run();
-				});
-			} else {
-				return createAudioResource(ytstream, { metadata: this, inputType: StreamType.WebmOpus });
-			}
+			// 		ffmpeg()
+			// 			.setFfmpegPath('C:\\ffmpeg\\bin\\ffmpeg.exe')
+			// 			.input(ytstream)
+			// 			.inputOptions('-thread_queue_size 16384')
+			// 			.format(format.container)
+			// 			.audioCodec(format.audioCodec!)
+			// 			.audioBitrate(format.audioBitrate!)
+			// 			.seek(Math.ceil(seekTime))
+			// 			.output(ws)
+			// 			.on('codecData', (data) => {
+			// 				Logger.trace('Input is ' + data.audio + ' audio ' +
+			// 					'with ' + data.video + ' video');
+			// 			})
+			// 			.on('stderr', (stderrLine) => {
+			// 				Logger.error('Stderr output: ' + stderrLine, undefined);
+			// 			})
+			// 			.on('start', () => {
+			// 				Logger.trace('ffmpeg start');
+			// 			})
+			// 			.on('progress', (info) => {
+			// 				Logger.trace('progress ' + info.percent + '%');
+			// 			})
+			// 			.on('error', (err) => {
+			// 				Logger.error('An error occurred: ' + err.message, err.trace);
+			// 				reject(err);
+			// 			})
+			// 			.on('end', () => {
+			// 				resolve(createAudioResource(rs, { metadata: this, inputType: StreamType.WebmOpus }));
+			// 			})
+			// 			.run();
+			// 	});
+			// } else {
+			// 	return createAudioResource(ytstream, { metadata: this, inputType: StreamType.WebmOpus });
+			// }
 
 			
 

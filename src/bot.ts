@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 process.title = 'NEXUS BOT';
 
+import 'dotenv/config';
 import Discord, { Snowflake, GatewayIntentBits, Client, ColorResolvable } from 'discord.js';
 import MusicSubscription from './modules/subscription.js';
 import Logger from './modules/logger.js';
@@ -51,15 +53,14 @@ export default class Bot {
 				const {default: event} = await import(`${eventURL.href}/${file}`);
 
 				if (event.once) {
-					this.client.once(event.name, (...args) => event.execute(...args));
+					this.client.once(event.name, (...args: any) => event.execute(...args));
 				} else {
-					this.client.on(event.name, (...args) => event.execute(...args));
+					this.client.on(event.name, (...args: any) => event.execute(...args));
 				}
 			}
 			this._loadMs = Date.now() - this.startTime;
 			Logger.info(`EVENTS LOADED - ${this._loadMs}ms`);
 		})();
-
 
 		this.client.login(process.env.BOT_TOKEN);
 	}

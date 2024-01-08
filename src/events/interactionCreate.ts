@@ -38,7 +38,7 @@ async function CommandInteractionHandler(interaction: CommandInteraction) {
 	const { default: Bot } = await import('../bot.js');
 
 	if (!Bot.client.application?.owner) await Bot.client.application?.fetch();
-	if (!(process.env._ && process.env._.indexOf('heroku') !== -1) && interaction.user.id !== Bot.client.application?.owner?.id) return interaction.reply({ content: '🦊', ephemeral: true });
+	// if (!(process.env._ && process.env._.indexOf('heroku') !== -1) && interaction.user.id !== Bot.client.application?.owner?.id) return interaction.reply({ content: '🦊', ephemeral: true });
 	// if (interaction.user.id !== client.application?.owner?.id) {
 	// 	if (interaction.member instanceof GuildMember) {
 	// 		await interaction.followUp('Currently under maintenence, try again later.');

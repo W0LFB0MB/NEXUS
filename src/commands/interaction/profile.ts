@@ -49,29 +49,29 @@ export default {
 			.setTitle(user.username)
 			.setColor(user.accentColor ?? null)
 			.setThumbnail(user.avatarURL())
-			.setDescription('Chad music enjoyer.')
-			.addFields([
-				{
-					name: 'GPL',
-					value: isOwner ? 'Owner' : 'Basic',
-					inline: true,
-				}
-			]);
+			.setDescription('Chad music enjoyer.');
+			// .addFields([
+			// 	{
+			// 		name: 'GPL',
+			// 		value: isOwner ? 'Owner' : 'Basic',
+			// 		inline: true,
+			// 	}
+			// ]);
 
 		if (isOwner) profileEmbed.setAuthor({ iconURL: 'https://cdn.discordapp.com/attachments/1006983950629097625/1006984053028823050/nstaffs.png', name: 'NEXUS STAFF' });
 
-		if (interaction.inGuild()) {
-			const isGuildOwner = await interaction.guild!.ownerId === user.id;
-			const isAdministrator = await (await interaction.guild!.members.fetch(user)).permissions.has(PermissionsBitField.Flags.Administrator);
+		// if (interaction.inGuild()) {
+		// 	const isGuildOwner = await interaction.guild!.ownerId === user.id;
+		// 	const isAdministrator = await (await interaction.guild!.members.fetch(user)).permissions.has(PermissionsBitField.Flags.Administrator);
 
-			profileEmbed.addFields([
-				{
-					name: 'LPL',
-					value: isGuildOwner ? 'Owner' : isAdministrator ? 'Administrator' : 'Basic',
-					inline: true,
-				}
-			]);
-		}
+		// 	profileEmbed.addFields([
+		// 		{
+		// 			name: 'LPL',
+		// 			value: isGuildOwner ? 'Owner' : isAdministrator ? 'Administrator' : 'Basic',
+		// 			inline: true,
+		// 		}
+		// 	]);
+		// }
 
 		profileEmbed.addFields([
 			{

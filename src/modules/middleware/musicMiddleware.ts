@@ -6,7 +6,7 @@ export default async function musicMiddleware(interaction: CommandInteraction, n
 
 	if (interaction.member instanceof GuildMember) {
 		if (!interaction.member.voice.channel) {
-			interaction.reply('Join a voice channel and then try that again!');
+			interaction.reply('Join a voice channel and try again!');
 			return;
 		} else if (subscription && (interaction.member.voice.channelId !== subscription.channelId)) {
 			interaction.reply('The bot is currently in use in another channel.');

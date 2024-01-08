@@ -117,10 +117,10 @@ export default {
 				// Attempt to create a Track from the user's video URL
 				trackCreator(toQueue, {
 					onStart() {
-						interaction.followUp({ content: 'Now playing!', ephemeral: false }).catch(console.warn);
+						// interaction.followUp({ content: 'Now playing!', ephemeral: false }).catch(console.warn);
 					},
 					onFinish() {
-						interaction.followUp({ content: 'Now finished!', ephemeral: true }).catch(console.warn); // not required, caused extra spam
+						// interaction.followUp({ content: 'Now finished!', ephemeral: true }).catch(console.warn); // not required, caused extra spam
 					},
 					onError(error: Error) {
 						console.warn(error);
