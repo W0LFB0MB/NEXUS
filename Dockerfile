@@ -22,7 +22,7 @@ RUN rm -rf ./src
 
 
 COPY config.json config.json
-COPY ./images ./images
-COPY ./audio ./audio
+# COPY ./images ./images
+# COPY ./audio ./audio
 
 CMD ["npm", "run", "start"]
