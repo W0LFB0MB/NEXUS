@@ -29,8 +29,9 @@ export default {
 
 		if (!Bot.client.application?.owner) await Bot.client.application?.fetch();
 		if (!(process.env._ && process.env._.indexOf('heroku') !== -1) && message.author.id !== Bot.client.application?.owner?.id) return;
-		if (!message.content.toLowerCase().startsWith(Bot.config.commandPrefix)) return; // check if message is actually a command
-		const messageCommand = message.content.slice(Bot.config.commandPrefix.length).split(' ')[0].toLowerCase(); // get command keyword e.g. deploy instead of n!deploy awdawd
+		if (!message.content.toLowerCase().startsWith(`<@${Bot.client.user?.id}>`)) return; // check if message is actually a command
+		const messageCommand = message.content.toLowerCase().slice(`<@${Bot.client.user?.id}>`.length).split(' ')[1]; // get command keyword
+		Logger.trace(message.content.toLowerCase());
 		Logger.trace(messageCommand);
 		let foundCommand = false;
 
