@@ -38,6 +38,8 @@ export default class Bot {
 	private static _loadMs: number;
 	public static get loadMs(): number { return Bot._loadMs; }
 
+	public static maintenence = false;
+
 	static {
 		Logger.info('BOT STARTED');
 		this.client = new Discord.Client({ intents: intents });
