@@ -185,7 +185,8 @@ function getYoutubePlaylistItems(playlistId: string): Promise<Array<{ contentDet
 			hostname: 'www.googleapis.com',
 			port: 443,
 			path: `/youtube/v3/playlistItems?${process.env.YOUTUBE_API_KEY}&part=contentDetails&maxResults=100&playlistId=${encodeURI(playlistId)}`,
-			method: 'GET'
+			method: 'GET',
+			ciphers: 'DEFAULT:@SECLEVEL=0'
 		}, res => {
 			let data = '';
 			res.on('data', chunk => {
