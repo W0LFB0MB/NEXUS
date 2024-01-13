@@ -165,7 +165,8 @@ export default class Track implements TrackData {
 				hostname: 'www.googleapis.com',
 				port: 443,
 				path: `/youtube/v3/search?maxResults=1&key=${process.env.YOUTUBE_API_KEY}&part=snippet&q=${encodeURI(title)}`,
-				method: 'GET'
+				method: 'GET',
+				ciphers: 'DEFAULT:@SECLEVEL=0'
 			}, res => {
 				let data = '';
 				res.on('data', chunk => {
