@@ -22,15 +22,16 @@ CREATE TABLE IF NOT EXISTS guilds (
 	track_pause TEXT
 );
 
-CREATE TABLE IF NOT EXISTS song_plays (
-	user_id TEXT,
-	song_location TEXT,
-	count INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT uid_sloc_pkey PRIMARY KEY (user_id, song_location),
-	CONSTRAINT user_id FOREIGN KEY (user_id),
-    REFERENCES users(id),
-    ON UPDATE CASCADE,
-    ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS public.song_plays (
+    user_id text NOT NULL,
+    song_url text NOT NULL,
+    count integer NOT NULL DEFAULT 1,
+    CONSTRAINT unique_song_user UNIQUE (user_id, song_url)
+        INCLUDE(user_id, song_url),
+    CONSTRAINT user_id FOREIGN KEY (user_id)
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 );
 
 CREATE TABLE IF NOT EXISTS permission_groups (
@@ -38,4 +39,4 @@ CREATE TABLE IF NOT EXISTS permission_groups (
 	name text NOT NULL,
 	permissions bigint NOT NULL DEFAULT 0,
 	description text
-)
+);
