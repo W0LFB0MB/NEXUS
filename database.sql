@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS options (
 	option text NOT NULL,
 	value text,
 	CONSTRAINT options_pkey PRIMARY KEY (option)
-)
+);
 
 CREATE TABLE IF NOT EXISTS users (
 	id TEXT NOT NULL PRIMARY KEY,
