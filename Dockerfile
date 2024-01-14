@@ -22,5 +22,6 @@ RUN rm -rf ./src
 
 
 COPY config.json config.json
+COPY database.sql database.sql
 
 CMD ["npm", "run", "start"]
