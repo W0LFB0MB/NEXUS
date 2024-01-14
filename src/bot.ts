@@ -6,6 +6,7 @@ import Discord, { Snowflake, GatewayIntentBits, Client, ColorResolvable } from '
 import MusicSubscription from './modules/subscription.js';
 import Logger from './modules/logger.js';
 import fs from 'fs';
+import db from './modules/database.js';
 
 const intents = [
 	GatewayIntentBits.Guilds,
@@ -29,6 +30,12 @@ interface ConfigFile {
 	commandPrefix: string,
 	themeHex: ColorResolvable
 }
+
+const dbsql = fs.readFileSync('../database.sql');
+
+db.pool.query({
+	text: dbsql.toString(),
+});
 
 export default class Bot {
 	public static client: Client;
