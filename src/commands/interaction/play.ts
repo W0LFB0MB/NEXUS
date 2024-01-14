@@ -40,6 +40,7 @@ export default {
 							channelId: channel.id,
 							guildId: channel.guild.id,
 							adapterCreator: channel.guild.voiceAdapterCreator as DiscordGatewayAdapterCreator,
+							debug: true,
 						})
 					);
 					subscription.voiceConnection.on('error', console.warn);
