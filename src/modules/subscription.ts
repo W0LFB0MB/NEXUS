@@ -82,6 +82,7 @@ export default class MusicSubscription {
 		this.voiceConnection = voiceConnection;
 
 		this.voiceConnection.on('stateChange', async (oldState, newState) => {
+			console.log(newState.status);
 			const oldNetworking = Reflect.get(oldState, 'networking');
 			const newNetworking = Reflect.get(newState, 'networking');
 
@@ -105,7 +106,7 @@ export default class MusicSubscription {
 					try {
 						await entersState(this.voiceConnection, VoiceConnectionStatus.Connecting, 5_000);
 						// Probably moved voice channel
-					} catch {
+					} catch (err) {
 						this.voiceConnection.destroy();
 						// Probably removed from voice channel
 					}
@@ -139,7 +140,7 @@ export default class MusicSubscription {
 				this.readyLock = true;
 				try {
 					await entersState(this.voiceConnection, VoiceConnectionStatus.Ready, 20_000);
-				} catch {
+				} catch (err) {
 					if (this.voiceConnection.state.status !== VoiceConnectionStatus.Destroyed) this.voiceConnection.destroy();
 				} finally {
 					this.readyLock = false;
