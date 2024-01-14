@@ -31,10 +31,8 @@ interface ConfigFile {
 	themeHex: ColorResolvable
 }
 
-const dbsql = fs.readFileSync('../database.sql');
-
 db.pool.query({
-	text: dbsql.toString(),
+	text: fs.readFileSync('database.sql').toString(),
 });
 
 export default class Bot {
