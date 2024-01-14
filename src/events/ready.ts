@@ -36,9 +36,9 @@ export default {
 		Bot.client.user.setPresence({
 			status: activityAndStatusRows.find(options => options.option === 'status')?.value.toLowerCase() ?? 'online',
 			activities: [{
-				name: activityAndStatusRows.find(options => options.option === 'activityName').value ?? 'furret walk',
-				type: parseInt(activityAndStatusRows.find(options => options.option === 'activityType').value) ?? '2',
-				url: activityAndStatusRows.find(options => options.option === 'activityURL').value ?? 'https://youtu.be/ih9zBLDr_ro'
+				name: activityAndStatusRows.find(options => options.option === 'activityName')?.value ?? 'furret walk',
+				type: parseInt(activityAndStatusRows.find(options => options.option === 'activityType')?.value ?? 2),
+				url: activityAndStatusRows.find(options => options.option === 'activityURL')?.value ?? 'https://youtu.be/ih9zBLDr_ro'
 			}],
 		});
 
