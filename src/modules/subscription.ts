@@ -49,7 +49,7 @@ export default class MusicSubscription {
 
 		db.pool.query({
 			text: `
-				UPDATE servers
+				UPDATE guilds
 				SET track_pause = $2
 				WHERE id = $1
 			`,
@@ -193,7 +193,7 @@ export default class MusicSubscription {
 
 		db.pool.query({
 			text: `
-					UPDATE servers
+					UPDATE guilds
 					SET queue = $2
 					WHERE id = $1
 				`,
@@ -221,7 +221,7 @@ export default class MusicSubscription {
 
 		db.pool.query({
 			text: `
-					UPDATE servers
+					UPDATE guilds
 					SET track_location = null, track_type = null, track_loop = null, channel_id = null, track_start = null, track_pause = null, queue = null
 					WHERE id = $1
 				`,
@@ -256,7 +256,7 @@ export default class MusicSubscription {
 		if (!nextTrack) {
 			db.pool.query({
 				text: `
-					UPDATE servers
+					UPDATE guilds
 					SET track_location = null, track_type = null, track_loop = null, channel_id = null, track_start = null, track_pause = null, queue = null
 					WHERE id = $1
 				`,
@@ -279,7 +279,7 @@ export default class MusicSubscription {
 			
 			db.pool.query({
 				text: `
-					UPDATE servers
+					UPDATE guilds
 					SET track_location = $2, track_type = $3, track_loop = $4, channel_id = $5, track_start = $6
 					WHERE id = $1
 				`,
@@ -289,7 +289,7 @@ export default class MusicSubscription {
 			if (!this.paused) {
 				db.pool.query({ 
 					text: `
-						UPDATE servers
+						UPDATE guilds
 						SET track_pause = null
 						WHERE id = $1
 					`,
