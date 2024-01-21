@@ -1,5 +1,7 @@
 # NEXUS [![Node.js CI](https://github.com/W0LFB0MB/NEXUS/actions/workflows/node.js.yml/badge.svg)](https://github.com/W0LFB0MB/NEXUS/actions/workflows/node.js.yml)
 
+# THIS BOT IS NOT FINISHED AND HAS MAJOR BUGS
+
 A discord bot for the vibes!
 
 ## Features
